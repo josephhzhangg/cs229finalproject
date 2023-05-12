@@ -90,3 +90,13 @@ def split_dataset(filename, train_ratio=0.9, seed=42):
     
     return train_lines, test_lines
 
+
+def classifyPredictions(predictions, class1, class2):
+    ret = []
+    for pred in predictions:
+        if abs(class1 - pred) > abs(class2 - pred):
+            ret.append(float(class2))
+        else:
+            ret.append(float(class1))
+    
+    return ret
