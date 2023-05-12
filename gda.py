@@ -33,9 +33,6 @@ class GDA:
             x: Training example inputs. Shape (n_examples, dim).
             y: Training example labels. Shape (n_examples,).
         """
-        # *** START CODE HERE ***
-        # Find phi, mu_0, mu_1, and sigma
-        # Write theta in terms of the parameters
         n_rows = x.shape[0]
         n_cols = x.shape[1]
 
@@ -50,7 +47,7 @@ class GDA:
         n_neg = 0
         
         for i in range(n_rows):
-            if y[i] == 1:
+            if y[i] == 4: # This is changed to 4 for malignant instead of a predicted value of 1
                 phi += 1
                 mu_1 += x[i]
                 n_pos += 1
@@ -80,7 +77,7 @@ class GDA:
         theta7 = selfTheta[0][6]
         theta8 = selfTheta[0][7]
         theta9 = selfTheta[0][8]
-        #theta10 = selfTheta[0][9]
+
 
         theta0 = -0.5 * (np.matmul(mu_1, np.matmul(sigmaInv, mu_1.T)) - np.matmul(mu_0, np.matmul(sigmaInv, mu_0.T))) - np.log(1/(phi + 0.0001) - 1)
         self.theta[0] = theta0
@@ -93,10 +90,8 @@ class GDA:
         self.theta[7] = theta7
         self.theta[8] = theta8
         self.theta[9] = theta9
-        #self.theta[10] = theta10
 
 
-        # *** END CODE HERE ***
 
     def predict(self, x):
         """Make a prediction given new inputs x.
@@ -107,8 +102,7 @@ class GDA:
         Returns:
             Outputs of shape (n_examples,).
         """
-        # *** START CODE HERE ***
+        print(-x.dot(self.theta))
         p = 1 / (1 + np.exp(-x.dot(self.theta)))
-        return p
-        # *** END CODE HERE
+
 
