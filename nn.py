@@ -10,6 +10,7 @@ import visualkeras
 
 import util
 
+
 def main():
 
     ### LOAD DATASET ###

@@ -167,6 +167,93 @@ def test_centroids(centroids, data, y):
     correct = 0
     wrong = 0
 
+    true_positives = 0
+    true_negatives = 0
+    false_positives = 0
+    false_negatives = 0
+
+    for i in range(data.shape[0]):
+        minDist = float('inf')
+        currAssignment = 0
+        for k in range(n_clusters):
+            currDist = np.sum((data[i]-centroids[k])**2)
+            if (currDist < minDist):
+                minDist = currDist
+                currAssignment = k
+        
+        if currAssignment == 0:
+            if cluster0type == y[i]:
+                correct += 1
+                if y[i] == 1:
+                    true_positives += 1
+                else:
+                    true_negatives += 1
+            else:
+                wrong += 1
+                if y[i] == 1:
+                    false_negatives += 1
+                else:
+                    false_positives += 1
+        else:
+            if cluster1type == y[i]:
+                correct += 1
+                if y[i] == 1:
+                    true_positives += 1
+                else:
+                    true_negatives += 1
+            else:
+                wrong += 1
+                if y[i] == 1:
+                    false_negatives += 1
+                else:
+                    false_positives += 1
+    
+
+    accuracy = correct / (correct + wrong)
+    precision = true_positives / (true_positives + false_positives)
+    recall = true_positives / (true_positives + false_negatives)
+    f1_score = 2 * (precision * recall) / (precision + recall)
+
+    print("Accuracy: ", accuracy)
+    print("Precision: ", precision)
+    print("Recall: ", recall)
+    print("F1 Score: ", f1_score)
+
+    """"
+    n_clusters = centroids.shape[0]
+    cluster0_pos = 0
+    cluster0_neg = 0    
+    cluster1_pos = 0
+    cluster1_neg = 0
+    for i in range(data.shape[0]):
+        minDist = float('inf')
+        currAssignment = 0
+        for k in range(n_clusters):
+            currDist = np.sum((data[i]-centroids[k])**2)
+            if (currDist < minDist):
+                minDist = currDist
+                currAssignment = k
+        if y[i] == 0:
+            if currAssignment == 0:
+                cluster0_neg += 1
+            else:
+                cluster1_neg += 1
+        else:
+            if currAssignment == 0:
+                cluster0_pos += 1
+            else:
+                cluster1_pos += 1
+
+    print("cluster 0: ", cluster0_pos, cluster0_neg, " , cluster 1: ", cluster1_pos, cluster1_neg)
+    cluster0type = 1 if cluster0_pos > cluster0_neg else 0
+    cluster1type = 1 if cluster1_pos > cluster1_neg else 0
+    if (cluster0type == cluster1type):
+        print("BAD: SAME PREFERENCE FOR BOTH CLUSTERS")
+        return
+    
+    correct = 0
+    wrong = 0
+
     for i in range(data.shape[0]):
         minDist = float('inf')
         currAssignment = 0
@@ -194,6 +281,7 @@ def test_centroids(centroids, data, y):
     # print("sensitivity: ", sensitivity)
     # print("specificity: ", specificity)
     # print("balanced accuracy: ", (sensitivity + specificity)/2)
+    """
 
 
 def main(args):
@@ -228,7 +316,14 @@ def main(args):
 
         # Test centroid assignemnts
         #print("testing test data")
+        #test_centroids(centroids, train_x, train_y)
+        # Test centroid assignments on training data
+        print("Testing training data")
         test_centroids(centroids, train_x, train_y)
+
+        # Test centroid assignments on testing data
+        print("Testing testing data")
+        test_centroids(centroids, test_x, test_y)
 
 
 

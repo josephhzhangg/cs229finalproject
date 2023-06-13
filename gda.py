@@ -47,7 +47,7 @@ class GDA:
         n_neg = 0
         
         for i in range(n_rows):
-            if y[i] == 4: # This is changed to 4 for malignant instead of a predicted value of 1
+            if y[i] == 1: # We change this back to 1 from malignant value of 4 for breast cancer dataset.
                 phi += 1
                 mu_1 += x[i]
                 n_pos += 1
@@ -66,6 +66,7 @@ class GDA:
         sigma = sigma / n_rows 
 
         # Writing theta in terms of param
+        # Working with clevelanddataset, we have 13 param and then y predictions
         sigmaInv = np.linalg.inv(sigma)
         selfTheta = (-0.5 * (np.matmul(mu_0, sigmaInv.T) - np.matmul(mu_1, sigmaInv.T) + np.matmul(mu_0, sigmaInv) - np.matmul(mu_1, sigmaInv)))
         theta1 = selfTheta[0][0]
@@ -77,6 +78,10 @@ class GDA:
         theta7 = selfTheta[0][6]
         theta8 = selfTheta[0][7]
         theta9 = selfTheta[0][8]
+        theta10 = selfTheta[0][9]
+        theta11 = selfTheta[0][10]
+        theta12 = selfTheta[0][11]
+        
 
 
         theta0 = -0.5 * (np.matmul(mu_1, np.matmul(sigmaInv, mu_1.T)) - np.matmul(mu_0, np.matmul(sigmaInv, mu_0.T))) - np.log(1/(phi + 0.0001) - 1)
@@ -90,6 +95,10 @@ class GDA:
         self.theta[7] = theta7
         self.theta[8] = theta8
         self.theta[9] = theta9
+        self.theta[10] = theta10
+        self.theta[11] = theta11
+        self.theta[12] = theta12
+        
 
 
 

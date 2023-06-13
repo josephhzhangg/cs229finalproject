@@ -132,8 +132,9 @@ class LinearModel(object):
         trueNegative = 0
         falseNegative = 0
         wrong = 0
+
         for i in range(X.shape[0]):
-            predict = 1 if self.sigmoid(np.dot(self.theta, X[i]))>=0.5 else 0
+            predict = 1 if self.sigmoid(np.dot(self.theta, X[i])) >= 0.5 else 0
             if predict == y[i]:
                 correct += 1
                 if y[i] == 1:
@@ -141,21 +142,32 @@ class LinearModel(object):
                 else:
                     trueNegative += 1
             else:
-                wrong +=1
+                wrong += 1
                 if y[i] == 1:
                     falseNegative += 1
                 else:
                     falsePositive += 1
 
-        print("correct: ", correct)
-        print("wrong: ", wrong)
-        print("ratio correct: ", correct/(correct+wrong), (truePositive+trueNegative)/X.shape[0])
-        sensitivity = truePositive/(truePositive+falseNegative)
-        specificity = trueNegative/(falsePositive+trueNegative)
-        print("sensitivity: ", sensitivity)
-        print("specificity: ", specificity)
-        print("balanced accuracy: ", (sensitivity + specificity)/2)
+        accuracy = correct / (correct + wrong)
+        sensitivity = truePositive / (truePositive + falseNegative)
+        specificity = trueNegative / (falsePositive + trueNegative)
+        balanced_accuracy = (sensitivity + specificity) / 2
+        precision = truePositive / (truePositive + falsePositive)
+        recall = sensitivity
+        f1_score = 2 * (precision * recall) / (precision + recall)
 
+        print("Accuracy: ", accuracy)
+        print("Sensitivity (Recall): ", sensitivity)
+        print("Specificity: ", specificity)
+        print("Balanced Accuracy: ", balanced_accuracy)
+        print("Precision: ", precision)
+        print("F1 Score: ", f1_score)
+        
+        # Confusion Matrix
+        confusion_matrix = np.array([[trueNegative, falsePositive],
+                                    [falseNegative, truePositive]])
+        print("Confusion Matrix:")
+        print(confusion_matrix)
 
 def run_exp(train_path, test_path = None, sine=False, ks=[1, 2, 3, 5, 10, 20], filename='plot.png'):
     train_x,train_y=util.load_dataset(train_path,add_intercept=True)
